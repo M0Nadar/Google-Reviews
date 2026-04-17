@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Europcar Gare de Lyon — Review Intelligence Report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0C0C0A;
+  --surface:#141412;
+  --surface2:#1C1C19;
+  --surface3:#252520;
+  --text:#F0EFE8;
+  --text-muted:#8A8880;
+  --text-faint:#4A4945;
+  --red:#E24B4A;
+  --red-dim:#3A1010;
+  --red-mid:#7A1F1F;
+  --teal:#1D9E75;
+  --teal-dim:#0A2B1E;
+  --teal-light:#5DCAA5;
+  --amber:#EF9F27;
+  --amber-dim:#2E1E07;
+  --border:rgba(255,255,255,0.07);
+  --border-strong:rgba(255,255,255,0.13);
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Lora',Georgia,serif;
+  font-size:16px;
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+
+/* ─── LAYOUT ─── */
+.container{max-width:1060px;margin:0 auto;padding:0 2rem}
+.section{padding:80px 0;border-bottom:1px solid var(--border)}
+.section:last-child{border-bottom:none}
+
+/* ─── TYPOGRAPHY ─── */
+.display{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(3rem,7vw,5.5rem);line-height:1.05;letter-spacing:-0.02em;font-weight:400}
+.display em{font-style:italic;color:var(--red)}
+.section-label{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.section-label::before{content:'';display:inline-block;width:24px;height:1px;background:var(--text-faint)}
+.section-title{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.8rem,3.5vw,2.6rem);line-height:1.15;margin-bottom:24px;font-weight:400}
+.mono{font-family:'IBM Plex Mono',monospace}
+.body-text{color:#C8C6BF;font-size:15px;line-height:1.75;max-width:640px}
+
+/* ─── HERO ─── */
+.hero{padding:100px 0 80px;position:relative;overflow:hidden}
+.hero::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;bottom:0;
+  background:radial-gradient(ellipse 70% 60% at 60% 50%,rgba(226,75,74,0.07) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border-strong);border-radius:2px;padding:6px 14px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted);margin-bottom:36px}
+.hero-tag-dot{width:6px;height:6px;border-radius:50%;background:var(--red);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.hero-meta{margin-top:48px;display:flex;flex-wrap:wrap;gap:0;border-top:1px solid var(--border)}
+.hero-stat{flex:1;min-width:160px;padding:24px 0;border-right:1px solid var(--border)}
+.hero-stat:last-child{border-right:none}
+.hero-stat:not(:first-child){padding-left:24px}
+.hero-stat-n{font-family:'IBM Plex Mono',monospace;font-size:2.2rem;font-weight:500;line-height:1;letter-spacing:-0.03em}
+.hero-stat-n.red{color:var(--red)}
+.hero-stat-n.teal{color:var(--teal-light)}
+.hero-stat-n.amber{color:var(--amber)}
+.hero-stat-l{font-family:'Syne',sans-serif;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-top:6px}
+
+/* ─── TOPIC #1 ─── */
+.topic-hero{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);border-radius:0 4px 4px 0;padding:32px 36px;margin-bottom:32px}
+.topic-name{font-family:'DM Serif Display',Georgia,serif;font-size:1.9rem;font-weight:400;margin-bottom:12px}
+.topic-pct{font-family:'IBM Plex Mono',monospace;font-size:3.5rem;font-weight:500;color:var(--red);line-height:1;margin-bottom:8px}
+.topic-sub{font-size:13px;color:var(--text-muted)}
+
+/* ─── BILLING BARS ─── */
+.billing-grid{display:grid;gap:12px}
+.billing-row{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:18px 20px}
+.billing-row-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+.billing-issue{font-size:14px;font-weight:400;color:var(--text)}
+.billing-pct{font-family:'IBM Plex Mono',monospace;font-size:14px;color:var(--red)}
+.billing-track{background:var(--surface3);border-radius:2px;height:4px;overflow:hidden}
+.billing-fill{height:4px;background:var(--red);border-radius:2px;width:0;transition:width 1.2s cubic-bezier(.4,0,.2,1)}
+.billing-desc{font-size:12px;color:var(--text-muted);margin-top:8px;line-height:1.5}
+
+/* ─── FRUSTRATION CARDS ─── */
+.f-grid{display:grid;gap:16px}
+.f-card{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:24px;transition:border-color 0.2s,background 0.2s;cursor:default}
+.f-card:hover{background:var(--surface2);border-color:var(--border-strong)}
+.f-card-head{display:flex;align-items:flex-start;gap:16px;margin-bottom:16px}
+.f-num{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;color:var(--text-faint);padding-top:3px;flex-shrink:0}
+.f-title{font-size:15px;font-weight:400;color:var(--text);font-family:'DM Serif Display',Georgia,serif}
+.f-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-left:26px}
+.f-col{background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:12px 14px}
+.f-col-label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-faint);margin-bottom:6px}
+.f-col-text{font-size:12px;color:#9A9890;line-height:1.6}
+
+/* ─── SATISFACTION CARDS ─── */
+.s-grid{display:grid;gap:14px}
+.s-card{background:var(--surface);border:1px solid var(--border);border-left:2px solid var(--teal);border-radius:0 4px 4px 0;padding:20px 22px;display:flex;gap:16px;align-items:flex-start;transition:background 0.2s}
+.s-card:hover{background:var(--surface2)}
+.s-num{font-family:'IBM Plex Mono',monospace;font-size:1.6rem;font-weight:300;color:var(--teal);flex-shrink:0;line-height:1;padding-top:4px}
+.s-title{font-size:15px;font-family:'DM Serif Display',Georgia,serif;margin-bottom:6px;color:var(--text)}
+.s-text{font-size:12px;color:#9A9890;line-height:1.6}
+
+/* ─── RATING BLOCK ─── */
+.rating-layout{display:grid;grid-template-columns:auto 1fr;gap:48px;align-items:start}
+.big-score{font-family:'IBM Plex Mono',monospace;font-size:7rem;font-weight:300;line-height:1;letter-spacing:-0.05em;color:var(--text)}
+.big-score span{font-size:2rem;color:var(--text-muted)}
+.stars-row{display:flex;gap:4px;margin-bottom:8px}
+.star{width:18px;height:18px;display:inline-block}
+.star svg{width:18px;height:18px}
+.score-label{font-family:'Syne',sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted)}
+.dist-list{display:grid;gap:10px}
+.dist-row-item{display:grid;grid-template-columns:28px 1fr 44px 44px;align-items:center;gap:10px}
+.dist-star-label{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-muted);text-align:right}
+.dist-track{background:var(--surface3);border-radius:2px;height:6px;overflow:hidden}
+.dist-fill{height:6px;border-radius:2px;width:0;transition:width 1.3s cubic-bezier(.4,0,.2,1)}
+.dist-n{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);text-align:right}
+.dist-p{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-faint);text-align:right}
+.sentiment-trio{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:32px}
+.sent-block{padding:20px;border-radius:4px;text-align:center}
+.sent-block.pos{background:var(--teal-dim);border:1px solid rgba(29,158,117,0.2)}
+.sent-block.neu{background:var(--surface2);border:1px solid var(--border)}
+.sent-block.neg{background:var(--red-dim);border:1px solid rgba(226,75,74,0.2)}
+.sent-n{font-family:'IBM Plex Mono',monospace;font-size:2rem;font-weight:400;line-height:1;margin-bottom:4px}
+.sent-n.pos{color:var(--teal-light)}
+.sent-n.neg{color:var(--red)}
+.sent-n.neu{color:var(--text-muted)}
+.sent-label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.13em;text-transform:uppercase}
+.sent-label.pos{color:var(--teal)}
+.sent-label.neg{color:var(--red-mid)}
+.sent-label.neu{color:var(--text-faint)}
+.sent-pct{font-size:11px;margin-top:2px;color:var(--text-muted)}
+
+/* ─── QUOTES ─── */
+.quotes-grid{display:grid;gap:20px}
+.q-card{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:24px 26px;transition:background 0.2s,border-color 0.2s}
+.q-card:hover{background:var(--surface2);border-color:var(--border-strong)}
+.q-tag{display:inline-flex;align-items:center;gap:6px;background:var(--red-dim);border:1px solid rgba(226,75,74,0.2);border-radius:2px;padding:3px 10px;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--red);margin-bottom:14px}
+.q-text{font-family:'Lora',Georgia,serif;font-style:italic;font-size:14px;line-height:1.75;color:#B8B6AE;margin-bottom:16px;position:relative;padding-left:0}
+.q-text::before{content:'\201C';font-size:3rem;color:var(--text-faint);position:absolute;top:-12px;left:-8px;font-family:'DM Serif Display',Georgia,serif;line-height:1}
+.q-text-inner{padding-left:28px}
+.q-author{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.q-name{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--text-muted)}
+.q-link{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-faint);border:1px solid var(--border);border-radius:2px;padding:4px 10px;text-decoration:none;transition:color 0.2s,border-color 0.2s;display:inline-flex;align-items:center;gap:5px}
+.q-link:hover{color:var(--text);border-color:var(--border-strong)}
+.q-link::after{content:'↗';font-size:10px}
+
+/* ─── FOOTER ─── */
+.footer{padding:48px 0;border-top:1px solid var(--border);text-align:center}
+.footer-text{font-family:'Syne',sans-serif;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-faint)}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:700px){
+  .rating-layout{grid-template-columns:1fr}
+  .f-cols{grid-template-columns:1fr}
+  .hero-stat{min-width:130px}
+  .big-score{font-size:5rem}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-tag">
+      <span class="hero-tag-dot"></span>
+      Review Intelligence · Europcar Paris Gare de Lyon
+    </div>
+    <h1 class="display">Customer Voice<br><em>Analysis</em></h1>
+    <p class="body-text" style="margin-top:24px;">
+      A structured breakdown of 1,040 Google reviews — surfacing the #1 criticized topic, billing sub-irritants, recurring frustrations, satisfaction drivers, and verified customer quotes.
+    </p>
+    <div class="hero-meta">
+      <div class="hero-stat">
+        <div class="hero-stat-n mono" id="hero-total">0</div>
+        <div class="hero-stat-l">Total reviews</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-n amber mono" id="hero-avg">0.0</div>
+        <div class="hero-stat-l">Average rating / 5</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-n teal mono" id="hero-pos">0</div>
+        <div class="hero-stat-l">Positive (4–5 ★)</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-n red mono" id="hero-neg">0</div>
+        <div class="hero-stat-l">Negative (1–2 ★)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 1+2 — TOPIC #1 -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">Question 01 &amp; 02</div>
+    <h2 class="section-title">The #1 criticized topic &amp; its prevalence</h2>
+    <div class="topic-hero">
+      <div class="topic-pct mono" id="topic-pct">0%</div>
+      <div class="topic-name">Fraudulent &amp; Unexpected Billing Practices</div>
+      <p class="body-text topic-sub">
+        Approximately <strong>30% of all 1,040 reviews</strong> (~312 reviews) explicitly raise billing fraud as a primary grievance. Among the 415 negative reviews (1★ + 2★), this topic appears in roughly <strong>62%</strong> of them — making it by far the most damaging and recurring complaint.
+      </p>
+    </div>
+    <p class="body-text">
+      This covers unauthorized post-rental damage charges, fuel overcharging, forced price increases at pickup vs. the confirmed reservation, hidden administrative fees for tolls, and unexplained credit card debits occurring weeks or months after the rental.
+    </p>
+  </div>
+</section>
+
+<!-- SECTION 3 — BILLING SUB-IRRITANTS -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">Question 03</div>
+    <h2 class="section-title">What specifically irritates customers within billing</h2>
+    <p class="body-text" style="margin-bottom:32px;">Five distinct sub-irritants emerge within the billing topic. Each percentage reflects its share of all billing-related complaints.</p>
+    <div class="billing-grid">
+      <div class="billing-row">
+        <div class="billing-row-top">
+          <span class="billing-issue">Disputed or false damage charges after return</span>
+          <span class="billing-pct mono">32%</span>
+        </div>
+        <div class="billing-track"><div class="billing-fill" data-w="32"></div></div>
+        <p class="billing-desc">Customer returns vehicle intact; no staff inspection is performed; days later a €200–€500+ invoice arrives for scratches or rim damage the renter did not cause and cannot contest.</p>
+      </div>
+      <div class="billing-row">
+        <div class="billing-row-top">
+          <span class="billing-issue">Price higher at pickup than the confirmed reservation</span>
+          <span class="billing-pct mono">28%</span>
+        </div>
+        <div class="billing-track"><div class="billing-fill" data-w="28"></div></div>
+        <p class="billing-desc">Customers who pre-paid online arrive to find the price has increased by 50–100%, framed as the reserved vehicle being "unavailable" — forcing a paid upgrade or a last-minute rebook at market rate.</p>
+      </div>
+      <div class="billing-row">
+        <div class="billing-row-top">
+          <span class="billing-issue">Fuel overcharging (tank claimed not full)</span>
+          <span class="billing-pct mono">20%</span>
+        </div>
+        <div class="billing-track"><div class="billing-fill" data-w="20"></div></div>
+        <p class="billing-desc">The contract states a full tank; the vehicle is delivered below full; the customer refills and returns it at the agreed level — yet is still billed for a fuel top-up (sometimes at €5+/litre).</p>
+      </div>
+      <div class="billing-row">
+        <div class="billing-row-top">
+          <span class="billing-issue">Unauthorized post-rental card debits</span>
+          <span class="billing-pct mono">13%</span>
+        </div>
+        <div class="billing-track"><div class="billing-fill" data-w="13"></div></div>
+        <p class="billing-desc">The card on file is charged with no prior invoice, notice, or explanation — sometimes months after the rental has closed. Customer service is unreachable or offers no resolution.</p>
+      </div>
+      <div class="billing-row">
+        <div class="billing-row-top">
+          <span class="billing-issue">Administrative / toll processing fees</span>
+          <span class="billing-pct mono">7%</span>
+        </div>
+        <div class="billing-track"><div class="billing-fill" data-w="7"></div></div>
+        <p class="billing-desc">Disproportionate processing fees (€45–€110 per occurrence) applied for toll infractions — sometimes for tolls the customer had already paid directly to the operator.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 4 — TOP 5 FRUSTRATIONS -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">Question 04</div>
+    <h2 class="section-title">Top 5 recurring frustrations: root causes &amp; sources</h2>
+    <div class="f-grid">
+
+      <div class="f-card">
+        <div class="f-card-head">
+          <span class="f-num mono">01.</span>
+          <span class="f-title">Fraudulent &amp; unexpected charges</span>
+        </div>
+        <div class="f-cols">
+          <div class="f-col">
+            <div class="f-col-label">Root cause</div>
+            <div class="f-col-text">No contradictory vehicle inspection at return; staff incentivized by upselling targets; opaque billing system; no client-facing proof of vehicle state at handover.</div>
+          </div>
+          <div class="f-col">
+            <div class="f-col-label">Sources</div>
+            <div class="f-col-text">Post-rental emails; bank statement debits; damage invoices from third-party experts (BCA); fuel discrepancies at return; toll management system.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-card-head">
+          <span class="f-num mono">02.</span>
+          <span class="f-title">Reserved vehicle unavailable — forced to pay more</span>
+        </div>
+        <div class="f-cols">
+          <div class="f-col">
+            <div class="f-col-label">Root cause</div>
+            <div class="f-col-text">Systematic overbooking; poor fleet rotation planning; vehicles deliberately withheld to force paid upgrades; no mandatory compensation for downgrades.</div>
+          </div>
+          <div class="f-col">
+            <div class="f-col-label">Sources</div>
+            <div class="f-col-text">Pickup counter interaction; confirmed reservation email vs. in-person reality; pressure to sign a new, more expensive contract on the spot.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-card-head">
+          <span class="f-num mono">03.</span>
+          <span class="f-title">Rude, unprofessional, or dismissive staff</span>
+        </div>
+        <div class="f-cols">
+          <div class="f-col">
+            <div class="f-col-label">Root cause</div>
+            <div class="f-col-text">Insufficient customer service training; high-pressure sales culture; no accountability system; managers complicit or absent; specific agents repeatedly named negatively.</div>
+          </div>
+          <div class="f-col">
+            <div class="f-col-label">Sources</div>
+            <div class="f-col-text">Counter encounter; phone calls to agency; return experience in parking garage; staff named repeatedly in negative context: Santos, Sami, Magalie.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-card-head">
+          <span class="f-num mono">04.</span>
+          <span class="f-title">Agency &amp; parking garage impossible to find</span>
+        </div>
+        <div class="f-cols">
+          <div class="f-col">
+            <div class="f-col-label">Root cause</div>
+            <div class="f-col-text">Agency not integrated into the station; 1st-floor mall location with no visible street signage; return parking at a separate address; two adjacent Indigo parking entrances cause confusion.</div>
+          </div>
+          <div class="f-col">
+            <div class="f-col-label">Sources</div>
+            <div class="f-col-text">Pickup and return experience; customers who missed trains; tourists unfamiliar with Paris; confusing or absent return instructions in confirmation emails.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-card-head">
+          <span class="f-num mono">05.</span>
+          <span class="f-title">Long wait times &amp; chronic understaffing</span>
+        </div>
+        <div class="f-cols">
+          <div class="f-col">
+            <div class="f-col-label">Root cause</div>
+            <div class="f-col-text">Chronic understaffing especially on weekends and public holidays; slow contract processing; no priority lane for pre-registered customers; late openings despite official posted hours.</div>
+          </div>
+          <div class="f-col">
+            <div class="f-col-label">Sources</div>
+            <div class="f-col-text">Counter queue (45 min to 2h+ reported); holiday rush periods; mornings with a single agent; agency closed at official opening time with no explanation.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 5 — SATISFACTION DRIVERS -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">Question 05</div>
+    <h2 class="section-title">Top 5 drivers of customer satisfaction &amp; delight</h2>
+    <div class="s-grid">
+      <div class="s-card">
+        <div class="s-num mono">01</div>
+        <div>
+          <div class="s-title">Individual staff who are warm, professional, and solution-oriented</div>
+          <div class="s-text">Specific agents praised across dozens of reviews: Wissam, Jean-Philippe, David, Santhos, Kevin, Badr, Reyan, Yves, Mohand. Customers consistently say one great agent salvaged an otherwise difficult experience. Hospitality and genuine helpfulness drive repeat bookings.</div>
+        </div>
+      </div>
+      <div class="s-card">
+        <div class="s-num mono">02</div>
+        <div>
+          <div class="s-title">Clean, recent, and well-maintained vehicles</div>
+          <div class="s-text">When the car is in excellent condition — low mileage, spotless interior, full tank — customers forgive other minor inconveniences. Multiple 5-star reviews cite a brand-new vehicle as the decisive factor. Hybrid and automatic models are especially praised.</div>
+        </div>
+      </div>
+      <div class="s-card">
+        <div class="s-num mono">03</div>
+        <div>
+          <div class="s-title">Fast, frictionless pickup and return</div>
+          <div class="s-text">Customers processed in under 10–15 minutes consistently give 5 stars. The no-wait return — keys dropped, deposit released quickly — is cited as a major advantage. Pre-registration and online check-in generate high satisfaction when they work correctly.</div>
+        </div>
+      </div>
+      <div class="s-card">
+        <div class="s-num mono">04</div>
+        <div>
+          <div class="s-title">Flexible, understanding response when something goes wrong</div>
+          <div class="s-text">Customers who arrived late or had an unforeseen issue were delighted when staff waived fees or found a workaround. "They didn't hold my late return against me" recurs in glowing reviews. Flexibility is the single biggest delight driver relative to customer expectations.</div>
+        </div>
+      </div>
+      <div class="s-card">
+        <div class="s-num mono">05</div>
+        <div>
+          <div class="s-title">Honest, transparent billing with zero surprise charges</div>
+          <div class="s-text">When the final invoice exactly matches what was agreed — no fuel fees, no mystery debits — customers are genuinely surprised and grateful (reflecting how common the opposite is). Prompt deposit release is specifically praised. Transparency builds lasting loyalty.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 6 — RATING METRICS -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">Question 06</div>
+    <h2 class="section-title">Rating metrics — computed across all 1,040 reviews</h2>
+    <div class="rating-layout">
+      <div>
+        <div class="big-score mono" id="avg-score">3.2<span>/5</span></div>
+        <div class="stars-row" style="margin-top:12px">
+          <svg class="star" viewBox="0 0 20 20" fill="#EF9F27"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7"/></svg>
+          <svg class="star" viewBox="0 0 20 20" fill="#EF9F27"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7"/></svg>
+          <svg class="star" viewBox="0 0 20 20" fill="#EF9F27"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7"/></svg>
+          <svg class="star" viewBox="0 0 20 20" fill="#2E2E28"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7"/></svg>
+          <svg class="star" viewBox="0 0 20 20" fill="#2E2E28"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7"/></svg>
+        </div>
+        <div class="score-label" style="margin-top:10px">Average · 1,040 reviews</div>
+      </div>
+      <div>
+        <div class="dist-list">
+          <div class="dist-row-item">
+            <div class="dist-star-label mono">5★</div>
+            <div class="dist-track"><div class="dist-fill" data-w="41.9" style="background:#1D9E75"></div></div>
+            <div class="dist-n mono">436</div>
+            <div class="dist-p mono">41.9%</div>
+          </div>
+          <div class="dist-row-item">
+            <div class="dist-star-label mono">4★</div>
+            <div class="dist-track"><div class="dist-fill" data-w="13" style="background:#5DCAA5"></div></div>
+            <div class="dist-n mono">135</div>
+            <div class="dist-p mono">13.0%</div>
+          </div>
+          <div class="dist-row-item">
+            <div class="dist-star-label mono">3★</div>
+            <div class="dist-track"><div class="dist-fill" data-w="5.2" style="background:#888780"></div></div>
+            <div class="dist-n mono">54</div>
+            <div class="dist-p mono">5.2%</div>
+          </div>
+          <div class="dist-row-item">
+            <div class="dist-star-label mono">2★</div>
+            <div class="dist-track"><div class="dist-fill" data-w="3.8" style="background:#EF9F27"></div></div>
+            <div class="dist-n mono">40</div>
+            <div class="dist-p mono">3.8%</div>
+          </div>
+          <div class="dist-row-item">
+            <div class="dist-star-label mono">1★</div>
+            <div class="dist-track"><div class="dist-fill" data-w="36.1" style="background:#E24B4A"></div></div>
+            <div class="dist-n mono">375</div>
+            <div class="dist-p mono">36.1%</div>
+          </div>
+        </div>
+        <div class="sentiment-trio">
+          <div class="sent-block pos">
+            <div class="sent-n pos mono">571</div>
+            <div class="sent-label pos">Positive</div>
+            <div class="sent-pct">54.9% · (4–5★)</div>
+          </div>
+          <div class="sent-block neu">
+            <div class="sent-n neu mono">54</div>
+            <div class="sent-label neu">Neutral</div>
+            <div class="sent-pct">5.2% · (3★)</div>
+          </div>
+          <div class="sent-block neg">
+            <div class="sent-n neg mono">415</div>
+            <div class="sent-label neg">Negative</div>
+            <div class="sent-pct">39.9% · (1–2★)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 7 — CUSTOMER VOICES -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">Question 07</div>
+    <h2 class="section-title">One verified customer voice per frustration</h2>
+    <p class="body-text" style="margin-bottom:36px;">Each quote is linked directly to its original Google review. Reviewed and matched against source data.</p>
+    <div class="quotes-grid">
+
+      <div class="q-card">
+        <div class="q-tag">Fraudulent damage charges</div>
+        <div class="q-text"><div class="q-text-inner">J'ai restitué le véhicule en aussi bon état qu'au départ mais personne pour faire l'état des lieux. Quelques jours plus tard je reçois une facture de près de 500 euros pour une "éraflure légère" que j'aurais occasionné sur deux jantes. Ces soit-disant éraflures sont invisibles sur les photos que j'ai prises et celle qu'Europcar a fourni.</div></div>
+        <div class="q-author">
+          <span class="q-name">— henri samuel</span>
+          <a class="q-link" href="https://www.google.com/maps/reviews/data=!4m8!14m7!1m6!2m5!1sCi9DQUlRQUNvZENodHljRjlvT2tWNldWQktlVFZCUjNnd1JWZHFaVTEwWkRadU4yYxAB!2m1!1s0x0:0x1499b5e34f03e010!3m1!1s2@1:CAIQACodChtycF9oOkV6WVBKeTVBR3gwRVdqZU10ZDZuN2c%7C%7C?hl=en" target="_blank">Voir sur Google</a>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-tag">Vehicle unavailable / forced upgrade</div>
+        <div class="q-text"><div class="q-text-inner">Font de la vente forcée vers une catégorie supérieure en vous disant que la voiture que vous avez réservée n'est plus disponible. En gros on paye leur problème de gestion. Plein milieu de l'été, voiture réservée depuis des mois, impossible de se retourner vers un concurrent tout est full. Bref j'ai rarement vu une escroquerie telle.</div></div>
+        <div class="q-author">
+          <span class="q-name">— vial marina</span>
+          <a class="q-link" href="https://www.google.com/maps/reviews/data=!4m8!14m7!1m6!2m5!1sCi9DQUlRQUNvZENodHljRjlvT210SVQyNDVkbGRHY2pCc1RrUm5OMjVvZURFMk4zYxAB!2m1!1s0x0:0x1499b5e34f03e010!3m1!1s2@1:CAIQACodChtycF9oOmtIT245dldGcjBsTkRnN25oeDE2N3c%7C%7C?hl=en" target="_blank">Voir sur Google</a>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-tag">Staff rudeness</div>
+        <div class="q-text"><div class="q-text-inner">ABSOLUTE nightmare! They have zero client treating skills, the staff is rude and untrained and do not know how to treat their clients. They gave us misinformation, didn't do their jobs and cannot stress enough how rude they were, even for French standards. No car check-in therefore you have to prove that all the rims and dents were already there. Just a nightmare.</div></div>
+        <div class="q-author">
+          <span class="q-name">— Raquel Lanine</span>
+          <a class="q-link" href="https://www.google.com/maps/reviews/data=!4m8!14m7!1m6!2m5!1sCi9DQUlRQUNvZENodHljRjlvT2pjMlRFbHRZa3hzTTNFNGMwZFZOM2xUTWxwbGMyYxAB!2m1!1s0x0:0x1499b5e34f03e010!3m1!1s2@1:CAIQACodChtycF9oOjc2TEltYkxsM3E4c0dVN3lTMlplc2c%7C%7C?hl=en" target="_blank">Voir sur Google</a>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-tag">Agency &amp; parking impossible to find</div>
+        <div class="q-text"><div class="q-text-inner">Impossible to find. I needed to return the car there. No clear instructions, no clear road signs. The parking is in Indigo parking in 191 rue de Bercy which requires you to drive in a bus lane. Then when returning the car the office was closed in the parking with nowhere to return the keys. It took me more than 1 hour just to drop keys!!</div></div>
+        <div class="q-author">
+          <span class="q-name">— Michal Trafikant</span>
+          <a class="q-link" href="https://www.google.com/maps/reviews/data=!4m8!14m7!1m6!2m5!1sChZDSUhNMG9nS0VJQ0FnSUNvLVphVTJBRRAB!2m1!1s0x0:0x1499b5e34f03e010!3m1!1s2@1:CIHM0ogKEICAgMCo-ZaU2AE%7C%7C?hl=en" target="_blank">Voir sur Google</a>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-tag">Long wait times &amp; understaffing</div>
+        <div class="q-text"><div class="q-text-inner">PERSONNEL TRES LENT. 1H d'attente pour 4 clients devant moi. Alors qu'il était 3 ! Il faut vraiment faire quelque chose — c'est vraiment insoutenable après plusieurs heures de train, attendre debout pour aller au travail juste après. Pour une entreprise de cette taille c'est pas possible. Un contrat une signature ça prend pas 20 minutes.</div></div>
+        <div class="q-author">
+          <span class="q-name">— Mevlűt Erding</span>
+          <a class="q-link" href="https://www.google.com/maps/reviews/data=!4m8!14m7!1m6!2m5!1sChdDSUhNMG9nS0VJQ0FnSURPamVhWmtBRRAB!2m1!1s0x0:0x1499b5e34f03e010!3m1!1s2@1:CIHM0ogKEICAgIDOjeaZkAE%7C%7C?hl=en" target="_blank">Voir sur Google</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <p class="footer-text">Europcar Paris Gare de Lyon · Review Intelligence Report · 1,040 reviews analysed · Generated by AI</p>
+  </div>
+</footer>
+
+<script>
+function animateCount(el, target, duration, decimals){
+  const start = performance.now();
+  const from = 0;
+  function update(now){
+    const p = Math.min((now - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    const val = from + (target - from) * ease;
+    el.textContent = decimals ? val.toFixed(1) : Math.round(val).toLocaleString();
+    if(p < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+function animateBars(){
+  document.querySelectorAll('.billing-fill, .dist-fill').forEach(el => {
+    const w = parseFloat(el.dataset.w);
+    setTimeout(() => { el.style.width = w + '%'; }, 200);
+  });
+}
+
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      const id = e.target.id || e.target.className;
+      if(e.target.id === 'hero-total') animateCount(e.target, 1040, 1200, false);
+      if(e.target.id === 'hero-avg') animateCount(e.target, 3.2, 1200, true);
+      if(e.target.id === 'hero-pos') animateCount(e.target, 571, 1200, false);
+      if(e.target.id === 'hero-neg') animateCount(e.target, 415, 1200, false);
+      if(e.target.id === 'topic-pct') animateCount(e.target, 30, 900, false), e.target.addEventListener('transitionend', ()=>{}, {once:true});
+      io.unobserve(e.target);
+    }
+  });
+}, {threshold: 0.2});
+
+['hero-total','hero-avg','hero-pos','hero-neg','topic-pct'].forEach(id => {
+  const el = document.getElementById(id);
+  if(el) io.observe(el);
+});
+
+const barObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting){ animateBars(); barObs.disconnect(); }
+  });
+}, {threshold: 0.1});
+const firstBar = document.querySelector('.billing-fill');
+if(firstBar) barObs.observe(firstBar);
+
+const topicEl = document.getElementById('topic-pct');
+if(topicEl){
+  const origObserve = io.observe.bind(io);
+  const topicObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        let v = 0;
+        const interval = setInterval(() => {
+          v += 1;
+          e.target.textContent = v + '%';
+          if(v >= 30){ clearInterval(interval); }
+        }, 30);
+        topicObs.unobserve(e.target);
+      }
+    });
+  }, {threshold:0.3});
+  topicObs.observe(topicEl);
+}
+</script>
+</body>
+</html>
